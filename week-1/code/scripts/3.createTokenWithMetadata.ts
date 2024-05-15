@@ -30,15 +30,12 @@ import {
   console.log("Mint address:", mintKeypair.publicKey.toBase58());
 
   // define the assorted token config settings
+
   const tokenConfig = {
-    // define how many decimals we want our tokens to have
     decimals: 6,
-    //
-    name: "Solana Bootcamp Summer 2024",
-    //
-    symbol: "SBS",
-    //
-    uri: "https://raw.githubusercontent.com/trankhacvy/solana-bootcamp-summer-2024/main/assets/sbs-token.json",
+    name: "Neko Cat",
+    symbol: "NC",
+    uri: "https://github.com/anhuong541/solana-bootcamp-summer-2024/blob/main/assets/sbs-token.json",
   };
 
   /**
