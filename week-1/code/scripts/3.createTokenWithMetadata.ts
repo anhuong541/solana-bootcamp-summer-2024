@@ -3,14 +3,21 @@
  */
 
 import { Keypair, PublicKey, SystemProgram } from "@solana/web3.js";
-import { MINT_SIZE, TOKEN_PROGRAM_ID, createInitializeMint2Instruction } from "@solana/spl-token";
+import {
+  MINT_SIZE,
+  TOKEN_PROGRAM_ID,
+  createAssociatedTokenAccountInstruction,
+  createInitializeMint2Instruction,
+  createMintToInstruction,
+  getAssociatedTokenAddressSync,
+} from "@solana/spl-token";
 
 import {
   PROGRAM_ID as METADATA_PROGRAM_ID,
   createCreateMetadataAccountV3Instruction,
 } from "@metaplex-foundation/mpl-token-metadata";
 
-import { payer, testWallet, connection } from "@/lib/vars";
+import { payer, testWallet, connection, STATIC_PUBLICKEY } from "@/lib/vars";
 
 import {
   buildTransaction,
@@ -35,7 +42,7 @@ import {
     decimals: 6,
     name: "Neko Cat",
     symbol: "NC",
-    uri: "https://github.com/anhuong541/solana-bootcamp-summer-2024/blob/main/assets/sbs-token.json",
+    uri: "https://raw.githubusercontent.com/anhuong541/solana-bootcamp-summer-2024/main/assets/sbs-token.json",
   };
 
   /**
@@ -133,9 +140,43 @@ import {
     },
   );
 
+  // step by step
+  // complete I
+
+  const ata = getAssociatedTokenAddressSync(mintKeypair.publicKey, payer.publicKey);
+
+  const ataInstruction = createAssociatedTokenAccountInstruction(
+    payer.publicKey,
+    ata,
+    payer.publicKey,
+    mintKeypair.publicKey,
+  );
+
+  const mintToInstruction = createMintToInstruction(
+    mintKeypair.publicKey,
+    ata,
+    payer.publicKey,
+    100 * 1_000_000,
+  );
   /**
    * Build the transaction to send to the blockchain
    */
+
+  const viAta = getAssociatedTokenAddressSync(mintKeypair.publicKey, STATIC_PUBLICKEY);
+
+  const viAtaIntruction = createAssociatedTokenAccountInstruction(
+    payer.publicKey,
+    viAta,
+    STATIC_PUBLICKEY,
+    mintKeypair.publicKey,
+  );
+
+  const mintToViIntruction = createMintToInstruction(
+    mintKeypair.publicKey,
+    viAta,
+    payer.publicKey,
+    10 * 1_000_000,
+  );
 
   const tx = await buildTransaction({
     connection,
@@ -145,6 +186,17 @@ import {
       createMintAccountInstruction,
       initializeMintInstruction,
       createMetadataInstruction,
+      // TODO: I. send to your wallet 100 token
+      // step 1: get token ata of your wallet
+      ataInstruction,
+      // step 2: send 100 token to ata
+      mintToInstruction,
+
+      // TODO: II. send to Vi's wallet 10 token
+      // step 1: get token ata of Vi's account
+      viAtaIntruction,
+      // step 2: send 10 token to Vi's ata
+      mintToViIntruction,
     ],
   });
 

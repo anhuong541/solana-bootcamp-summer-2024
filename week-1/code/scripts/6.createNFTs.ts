@@ -15,10 +15,18 @@ import { explorerURL, printConsoleSeparator } from "@/lib/helpers";
    * define our ship's JSON metadata
    */
   const metadata = {
-    name: "Solana Bootcamp Summer 2024",
+    name: "Huong NFT",
     symbol: "SBS",
-    description: "Solana Bootcamp Summer 2024",
-    image: "https://github.com/trankhacvy/solana-bootcamp-summer-2024/blob/main/assets/logo.png?raw=true",
+    description: "Huong NFT",
+    image:
+      "https://raw.githubusercontent.com/anhuong541/solana-bootcamp-summer-2024/main/assets/3741-angrypaimon.gif",
+    attributes: [
+      {
+        trait_type: "Accessory",
+        name: "Huong",
+      },
+    ],
+    // additional trait
   };
 
   /**
@@ -59,7 +67,7 @@ import { explorerURL, printConsoleSeparator } from "@/lib/helpers";
     useNewMint: tokenMint,
 
     // `sellerFeeBasisPoints` is the royalty that you can define on nft
-    sellerFeeBasisPoints: 500, // Represents 5.00%.
+    sellerFeeBasisPoints: 1000, // Represents 5.00%.
 
     //
     isMutable: true,
@@ -80,5 +88,5 @@ import { explorerURL, printConsoleSeparator } from "@/lib/helpers";
   const mintInfo = await metaplex.nfts().findByMint({
     mintAddress: tokenMint.publicKey,
   });
-  console.log(mintInfo);
+  console.log(JSON.stringify(mintInfo));
 })();
